@@ -9,24 +9,27 @@
   <div id="product-detail"></div>
 
   <script>
-    const productId = "{{ product_id }}";
+  const productId = "{{ product_id }}";
 
-    fetch(`/api/products/${productId}`)
-      .then(res => res.json())
-      .then(p => {
-        const container = document.getElementById('product-detail');
-        if (p.error) {
-          container.innerHTML = `<p>${p.error}</p>`;
-        } else {
-          container.innerHTML = `
-            <h2>${p.name}</h2>
-            <p><strong>Price:</strong> ₹${p.price}</p>
-            <p><strong>Description:</strong> ${p.description}</p>
-            <p><strong>Category:</strong> ${p.category}</p>
-            <p><strong>In Stock:</strong> ${p.inStock ? "Yes" : "No"}</p>
-          `;
-        }
-      });
-  </script>
+  fetch(`/api/products/${productId}`)
+    .then(res => res.json())
+    .then(p => {
+      const container = document.getElementById('product-detail');
+      if (p.error) {
+        container.innerHTML = `<p>${p.error}</p>`;
+      } else {
+        container.innerHTML = `
+          <h2>${p.name}</h2>
+          <p><strong>Price:</strong> ₹${p.retail_price}</p>
+          <p><strong>Brand:</strong> ${p.brand}</p>
+          <p><strong>Department:</strong> ${p.department}</p>
+          <p><strong>SKU:</strong> ${p.sku}</p>
+          <p><strong>Distribution Center ID:</strong> ${p.distribution_center_id}</p>
+        `;
+      }
+    });
+</script>
+
+
 </body>
 </html>
