@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Details</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <a href="/">⬅ Back to Products</a>
+  <div id="product-detail"></div>
+
+  <script>
+    const productId = "{{ product_id }}";
+
+    fetch(`/api/products/${productId}`)
+      .then(res => res.json())
+      .then(p => {
+        const container = document.getElementById('product-detail');
+        if (p.error) {
+          container.innerHTML = `<p>${p.error}</p>`;
+        } else {
+          container.innerHTML = `
+            <h2>${p.name}</h2>
+            <p><strong>Price:</strong> ₹${p.price}</p>
+            <p><strong>Description:</strong> ${p.description}</p>
+            <p><strong>Category:</strong> ${p.category}</p>
+            <p><strong>In Stock:</strong> ${p.inStock ? "Yes" : "No"}</p>
+          `;
+        }
+      });
+  </script>
+</body>
+</html>

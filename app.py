@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import sqlite3
 import os
@@ -6,16 +6,25 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Updated DB path
 DB_PATH = os.path.join(os.path.dirname(__file__), 'products_database.db')
 
-# GET all products
+# 🟢 Products List View (HTML page)
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+# 🟢 Product Detail View (HTML page)
+@app.route('/product/<int:product_id>')
+def product_detail(product_id):
+    return render_template("detail.html", product_id=product_id)
+
+# 🔁 API Endpoint: All products
 @app.route('/api/products', methods=['GET'])
 def get_all_products():
     try:
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM products")  # Update 'products' if your table name is different
+        cursor.execute("SELECT * FROM products")
         rows = cursor.fetchall()
         columns = [col[0] for col in cursor.description]
         result = [dict(zip(columns, row)) for row in rows]
@@ -24,7 +33,7 @@ def get_all_products():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# GET a product by ID
+# 🔁 API Endpoint: Product by ID
 @app.route('/api/products/<int:product_id>', methods=['GET'])
 def get_product_by_id(product_id):
     try:
@@ -43,6 +52,5 @@ def get_product_by_id(product_id):
     finally:
         conn.close()
 
-# Start Flask server
 if __name__ == '__main__':
     app.run(debug=True)
